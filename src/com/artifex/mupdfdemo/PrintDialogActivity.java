@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.JavascriptInterface;
 
 public class PrintDialogActivity extends Activity {
 	private static final String PRINT_DIALOG_URL = "https://www.google.com/cloudprint/dialog.html";
@@ -65,15 +66,19 @@ public class PrintDialogActivity extends Activity {
 		}
 	}
 
+	// https://stackoverflow.com/questions/27601733/cant-print-from-device
 	final class PrintDialogJavaScriptInterface {
+		@JavascriptInterface
 		public String getType() {
 			return cloudPrintIntent.getType();
 		}
 
+		@JavascriptInterface
 		public String getTitle() {
 			return cloudPrintIntent.getExtras().getString("title");
 		}
 
+		@JavascriptInterface
 		public String getContent() {
 			try {
 				ContentResolver contentResolver = getContentResolver();
@@ -99,10 +104,12 @@ public class PrintDialogActivity extends Activity {
 			return "";
 		}
 
+		@JavascriptInterface
 		public String getEncoding() {
 			return CONTENT_TRANSFER_ENCODING;
 		}
 
+		@JavascriptInterface
 		public void onPostMessage(String message) {
 			if (message.startsWith(CLOSE_POST_MESSAGE_NAME)) {
 				setResult(resultCode);
